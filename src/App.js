@@ -138,8 +138,17 @@ const selectRandom = (array, count) => {
 // MAIN COMPONENT
 // ============================================
 
+// Flag images for title page
+const FLAGS = [
+  { country: 'China', src: '/images/flag_china.png' },
+  { country: 'Japan', src: '/images/flag_japan.svg' },
+  { country: 'Korea', src: '/images/flag_korea.png' },
+  { country: 'Vietnam', src: '/images/flag_vietnam.png' },
+  { country: 'Mongolia', src: '/images/flag_mongolia.svg' },
+];
+
 export default function FaceOriginQuiz() {
-  const [stage, setStage] = useState('demographics');
+  const [stage, setStage] = useState('title');
   const [demographics, setDemographics] = useState({
     gender: '',
     race: '',
@@ -198,6 +207,49 @@ export default function FaceOriginQuiz() {
     
     return { correct, total, accuracy, byCountry };
   };
+
+  // ==========================================
+  // TITLE SCREEN
+  // ==========================================
+  if (stage === 'title') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            East Asian Identifier
+          </h1>
+          <p className="text-lg text-gray-600 mb-8">
+            A research study on cross-cultural face perception
+          </p>
+          
+          {/* Flags row */}
+          <div className="flex justify-center items-center gap-4 md:gap-6 mb-10 flex-wrap">
+            {FLAGS.map((flag) => (
+              <div key={flag.country} className="flex flex-col items-center">
+                <img 
+                  src={flag.src} 
+                  alt={`Flag of ${flag.country}`}
+                  className="w-16 h-10 md:w-20 md:h-12 object-cover rounded shadow-md border border-gray-200"
+                />
+                <span className="text-xs text-gray-500 mt-1">{flag.country}</span>
+              </div>
+            ))}
+          </div>
+          
+          <button
+            onClick={() => setStage('demographics')}
+            className="bg-blue-600 text-white py-3 px-10 rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg shadow-md"
+          >
+            Start Quiz
+          </button>
+          
+          <p className="text-sm text-gray-400 mt-8">
+            This quiz takes approximately 2-3 minutes to complete.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // ==========================================
   // DEMOGRAPHICS SCREEN
@@ -379,6 +431,27 @@ export default function FaceOriginQuiz() {
   // ==========================================
   if (stage === 'results') {
     const results = calculateResults();
+    const correct = results.correct;
+    const wrong = results.total - results.correct;
+    
+    // Custom messages based on score
+    let message = "";
+    if (correct <= 2) {
+      message = "You're probably racist, but we forgive you";
+    } else if (correct <= 5) {
+      message = "We know you tried your best";
+    } else if (correct <= 8) {
+      message = "Wow, good job! Let's get some BBQ, on me!";
+    } else {
+      message = "我们需要你们战斗，我们将把台北从帝国主义猪猡手中解放出来!";
+    }
+    
+    const handleTryAgain = () => {
+      setQuestions([]);
+      setCurrentIndex(0);
+      setResponses([]);
+      setStage('instructions');
+    };
     
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -389,39 +462,24 @@ export default function FaceOriginQuiz() {
           {/* Score Summary */}
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="text-center p-4 bg-white rounded-lg">
-                <p className="text-3xl font-bold text-blue-600">{results.accuracy}%</p>
-                <p className="text-sm text-gray-500">Overall Accuracy</p>
+              <div className="text-center p-4 bg-white rounded-lg border-2 border-green-200">
+                <p className="text-4xl font-bold text-green-600">{correct}</p>
+                <p className="text-sm text-gray-500">Correct</p>
               </div>
-              <div className="text-center p-4 bg-white rounded-lg">
-                <p className="text-3xl font-bold text-blue-600">{results.correct}/{results.total}</p>
-                <p className="text-sm text-gray-500">Correct Answers</p>
+              <div className="text-center p-4 bg-white rounded-lg border-2 border-red-200">
+                <p className="text-4xl font-bold text-red-500">{wrong}</p>
+                <p className="text-sm text-gray-500">Wrong</p>
               </div>
             </div>
             
-            <h3 className="font-medium text-gray-600 mb-3">Accuracy by Nationality</h3>
-            <div className="space-y-2">
-              {results.byCountry.filter(item => item.total > 0).map(item => (
-                <div key={item.country} className="flex items-center justify-between">
-                  <span className="text-gray-600">{item.country}</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-blue-500"
-                        style={{ width: `${item.accuracy}%` }}
-                      />
-                    </div>
-                    <span className="text-sm text-gray-500 w-20 text-right">
-                      {item.correct}/{item.total} ({item.accuracy}%)
-                    </span>
-                  </div>
-                </div>
-              ))}
+            {/* Custom message */}
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <p className="text-lg font-medium text-gray-700">{message}</p>
             </div>
           </div>
           
           <button
-            onClick={() => window.location.reload()}
+            onClick={handleTryAgain}
             className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
             Try Again

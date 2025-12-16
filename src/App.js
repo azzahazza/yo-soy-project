@@ -140,11 +140,11 @@ const selectRandom = (array, count) => {
 
 // Flag images for title page
 const FLAGS = [
-  { country: 'China', src: '/images/flag_china.png' },
-  { country: 'Japan', src: '/images/flag_japan.svg' },
-  { country: 'Korea', src: '/images/flag_korea.png' },
-  { country: 'Vietnam', src: '/images/flag_vietnam.png' },
-  { country: 'Mongolia', src: '/images/flag_mongolia.svg' },
+  { country: 'China', src: '/images/chinaflag.png' },
+  { country: 'Japan', src: '/images/Flag_of_Japan.svg' },
+  { country: 'Korea', src: '/images/Flag_of_South_Korea_svg.png' },
+  { country: 'Vietnam', src: '/images/Flag_of_Vietnam_svg.png' },
+  { country: 'Mongolia', src: '/images/Flag_of_Mongolia.svg' },
 ];
 
 export default function FaceOriginQuiz() {

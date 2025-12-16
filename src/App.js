@@ -142,8 +142,8 @@ const selectRandom = (array, count) => {
 const FLAGS = [
   { country: 'China', src: '/images/chinaflag.png' },
   { country: 'Japan', src: '/images/Flag_of_Japan.svg' },
-  { country: 'Korea', src: '/images/Flag_of_South_Korea_svg.png' },
-  { country: 'Vietnam', src: '/images/Flag_of_Vietnam_svg.png' },
+  { country: 'Korea', src: '/images/Flag_of_South_Korea.svg.png' },
+  { country: 'Vietnam', src: '/images/Flag_of_Vietnam.svg.png' },
   { country: 'Mongolia', src: '/images/Flag_of_Mongolia.svg' },
 ];
 

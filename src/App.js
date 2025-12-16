@@ -437,9 +437,9 @@ export default function FaceOriginQuiz() {
     // Custom messages based on score
     let message = "";
     if (correct <= 3) {
-      message = "You probably do the voices in private";
+      message = "I bet you do the voice";
     } else if (correct <= 7) {
-      message = `You aight ${demographics.race} boy`;
+      message = message = `You aight ${demographics.race === 'white' ? 'White/Caucasian' : demographics.race === 'black' ? 'Black/African' : demographics.race === 'hispanic' ? 'Hispanic/Latino' : demographics.race === 'south-asian' ? 'South Asian' : demographics.race === 'east-asian' ? 'East Asian' : demographics.race === 'southeast-asian' ? 'Southeast Asian' : demographics.race === 'middle-eastern' ? 'Middle Eastern' : demographics.race === 'pacific-islander' ? 'Pacific Islander' : demographics.race === 'mixed' ? 'Mixed/Multiple' : demographics.race === 'other' ? 'Other' : 'Prefer not to say'} boy`;
     } else {
       message = "我们需要你们战斗，我们将把台北从帝国主义猪猡手中解放出来!";
     }

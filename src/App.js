@@ -436,12 +436,10 @@ export default function FaceOriginQuiz() {
     
     // Custom messages based on score
     let message = "";
-    if (correct <= 2) {
-      message = "You're probably racist, but we forgive you";
-    } else if (correct <= 5) {
-      message = "We know you tried your best";
-    } else if (correct <= 8) {
-      message = "Wow, good job! Let's get some BBQ, on me!";
+    if (correct <= 3) {
+      message = "You probably do the voices in private";
+    } else if (correct <= 7) {
+      message = `You aight ${demographics.race} boy`;
     } else {
       message = "我们需要你们战斗，我们将把台北从帝国主义猪猡手中解放出来!";
     }

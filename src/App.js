@@ -556,7 +556,7 @@ export default function FaceOriginQuiz() {
                 <img 
                   src={currentQuestion.imageUrl} 
                   alt="Person to identify"
-                  className="max-h-40 md:max-h-96 w-auto object-contain"
+                  className="max-h-52 md:max-h-96 w-auto object-contain"
                 />
               </div>
               

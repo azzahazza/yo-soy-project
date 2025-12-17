@@ -398,11 +398,11 @@ export default function FaceOriginQuiz() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="flex flex-col md:flex-row">
               {/* Image on left */}
-              <div className="md:w-1/2 bg-gray-100 flex items-center justify-center">
+              <div className="md:w-1/2 bg-gray-100 flex items-center justify-center p-4">
                 <img 
                   src={currentQuestion.imageUrl} 
                   alt="Person to identify"
-                  className="w-full h-64 md:h-80 object-cover"
+                  className="max-w-full max-h-80 object-contain"
                 />
               </div>
               

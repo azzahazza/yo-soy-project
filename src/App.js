@@ -4,65 +4,90 @@ import { useState, useEffect } from 'react';
 // CONFIGURATION - All images with verified nationalities
 // ============================================
 const IMAGE_POOL = [
-  // Japanese (10)
-  { id: 1, imageUrl: '/images/japanese_1.webp', correctCountry: 'Japanese' },
-  { id: 2, imageUrl: '/images/japanese_2.webp', correctCountry: 'Japanese' },
-  { id: 3, imageUrl: '/images/japanese_3.webp', correctCountry: 'Japanese' },
-  { id: 4, imageUrl: '/images/japanese_4.webp', correctCountry: 'Japanese' },
-  { id: 5, imageUrl: '/images/japanese_5.webp', correctCountry: 'Japanese' },
-  { id: 6, imageUrl: '/images/japanese_6.webp', correctCountry: 'Japanese' },
+  // Japanese (15) - NEW
+  { id: 1, imageUrl: '/images/japanese_1.jpeg', correctCountry: 'Japanese' },
+  { id: 2, imageUrl: '/images/japanese_2.jpeg', correctCountry: 'Japanese' },
+  { id: 3, imageUrl: '/images/japanese_3.jpeg', correctCountry: 'Japanese' },
+  { id: 4, imageUrl: '/images/japanese_4.jpeg', correctCountry: 'Japanese' },
+  { id: 5, imageUrl: '/images/japanese_5.jpeg', correctCountry: 'Japanese' },
+  { id: 6, imageUrl: '/images/japanese_6.jpeg', correctCountry: 'Japanese' },
   { id: 7, imageUrl: '/images/japanese_7.jpeg', correctCountry: 'Japanese' },
   { id: 8, imageUrl: '/images/japanese_8.jpeg', correctCountry: 'Japanese' },
-  { id: 9, imageUrl: '/images/japanese_9.webp', correctCountry: 'Japanese' },
-  { id: 10, imageUrl: '/images/japanese_10.jpeg', correctCountry: 'Japanese' },
+  { id: 9, imageUrl: '/images/japanese_9.jpg', correctCountry: 'Japanese' },
+  { id: 10, imageUrl: '/images/japanese_10.jpg', correctCountry: 'Japanese' },
+  { id: 11, imageUrl: '/images/japanese_11.jpg', correctCountry: 'Japanese' },
+  { id: 12, imageUrl: '/images/japanese_12.jpg', correctCountry: 'Japanese' },
+  { id: 13, imageUrl: '/images/japanese_13.jpg', correctCountry: 'Japanese' },
+  { id: 14, imageUrl: '/images/japanese_14.jpg', correctCountry: 'Japanese' },
+  { id: 15, imageUrl: '/images/japanese_15.jpg', correctCountry: 'Japanese' },
   
-  // Korean (10)
-  { id: 11, imageUrl: '/images/korean_1.webp', correctCountry: 'Korean' },
-  { id: 12, imageUrl: '/images/korean_2.webp', correctCountry: 'Korean' },
-  { id: 13, imageUrl: '/images/korean_3.webp', correctCountry: 'Korean' },
-  { id: 14, imageUrl: '/images/korean_4.webp', correctCountry: 'Korean' },
-  { id: 15, imageUrl: '/images/korean_5.webp', correctCountry: 'Korean' },
-  { id: 16, imageUrl: '/images/korean_6.webp', correctCountry: 'Korean' },
-  { id: 17, imageUrl: '/images/korean_7.webp', correctCountry: 'Korean' },
-  { id: 18, imageUrl: '/images/korean_8.webp', correctCountry: 'Korean' },
-  { id: 19, imageUrl: '/images/korean_9.webp', correctCountry: 'Korean' },
-  { id: 20, imageUrl: '/images/korean_10.webp', correctCountry: 'Korean' },
+  // Korean (15)
+  { id: 16, imageUrl: '/images/korean_1.webp', correctCountry: 'Korean' },
+  { id: 17, imageUrl: '/images/korean_2.webp', correctCountry: 'Korean' },
+  { id: 18, imageUrl: '/images/korean_3.webp', correctCountry: 'Korean' },
+  { id: 19, imageUrl: '/images/korean_4.jpeg', correctCountry: 'Korean' },
+  { id: 20, imageUrl: '/images/korean_5.jpeg', correctCountry: 'Korean' },
+  { id: 21, imageUrl: '/images/korean_6.jpeg', correctCountry: 'Korean' },
+  { id: 22, imageUrl: '/images/korean_7.jpeg', correctCountry: 'Korean' },
+  { id: 23, imageUrl: '/images/korean_8.jpeg', correctCountry: 'Korean' },
+  { id: 24, imageUrl: '/images/korean_9.jpeg', correctCountry: 'Korean' },
+  { id: 25, imageUrl: '/images/korean_10.jpeg', correctCountry: 'Korean' },
+  { id: 26, imageUrl: '/images/korean_11.jpeg', correctCountry: 'Korean' },
+  { id: 27, imageUrl: '/images/korean_12.jpeg', correctCountry: 'Korean' },
+  { id: 28, imageUrl: '/images/korean_13.jpeg', correctCountry: 'Korean' },
+  { id: 29, imageUrl: '/images/korean_14.jpeg', correctCountry: 'Korean' },
+  { id: 30, imageUrl: '/images/korean_15.jpeg', correctCountry: 'Korean' },
   
-  // Chinese (10)
-  { id: 21, imageUrl: '/images/chinese_1.jpeg', correctCountry: 'Chinese' },
-  { id: 22, imageUrl: '/images/chinese_2.jpeg', correctCountry: 'Chinese' },
-  { id: 23, imageUrl: '/images/chinese_3.jpeg', correctCountry: 'Chinese' },
-  { id: 24, imageUrl: '/images/chinese_4.jpeg', correctCountry: 'Chinese' },
-  { id: 25, imageUrl: '/images/chinese_5.jpeg', correctCountry: 'Chinese' },
-  { id: 26, imageUrl: '/images/chinese_6.webp', correctCountry: 'Chinese' },
-  { id: 27, imageUrl: '/images/chinese_7.webp', correctCountry: 'Chinese' },
-  { id: 28, imageUrl: '/images/chinese_8.webp', correctCountry: 'Chinese' },
-  { id: 29, imageUrl: '/images/chinese_9.webp', correctCountry: 'Chinese' },
-  { id: 30, imageUrl: '/images/chinese_10.jpeg', correctCountry: 'Chinese' },
+  // Chinese (15)
+  { id: 31, imageUrl: '/images/chinese_1.jpg', correctCountry: 'Chinese' },
+  { id: 32, imageUrl: '/images/chinese_2.jpg', correctCountry: 'Chinese' },
+  { id: 33, imageUrl: '/images/chinese_3.jpeg', correctCountry: 'Chinese' },
+  { id: 34, imageUrl: '/images/chinese_4.jpeg', correctCountry: 'Chinese' },
+  { id: 35, imageUrl: '/images/chinese_5.jpeg', correctCountry: 'Chinese' },
+  { id: 36, imageUrl: '/images/chinese_6.jpeg', correctCountry: 'Chinese' },
+  { id: 37, imageUrl: '/images/chinese_7.jpeg', correctCountry: 'Chinese' },
+  { id: 38, imageUrl: '/images/chinese_8.jpeg', correctCountry: 'Chinese' },
+  { id: 39, imageUrl: '/images/chinese_9.jpeg', correctCountry: 'Chinese' },
+  { id: 40, imageUrl: '/images/chinese_10.jpeg', correctCountry: 'Chinese' },
+  { id: 41, imageUrl: '/images/chinese_11.jpg', correctCountry: 'Chinese' },
+  { id: 42, imageUrl: '/images/chinese_12.jpg', correctCountry: 'Chinese' },
+  { id: 43, imageUrl: '/images/chinese_13.jpg', correctCountry: 'Chinese' },
+  { id: 44, imageUrl: '/images/chinese_14.jpg', correctCountry: 'Chinese' },
+  { id: 45, imageUrl: '/images/chinese_15.jpg', correctCountry: 'Chinese' },
   
-  // Vietnamese (10)
-  { id: 31, imageUrl: '/images/vietnamese_1.webp', correctCountry: 'Vietnamese' },
-  { id: 32, imageUrl: '/images/vietnamese_2.png', correctCountry: 'Vietnamese' },
-  { id: 33, imageUrl: '/images/vietnamese_3.webp', correctCountry: 'Vietnamese' },
-  { id: 34, imageUrl: '/images/vietnamese_4.webp', correctCountry: 'Vietnamese' },
-  { id: 35, imageUrl: '/images/vietnamese_5.webp', correctCountry: 'Vietnamese' },
-  { id: 36, imageUrl: '/images/vietnamese_6.webp', correctCountry: 'Vietnamese' },
-  { id: 37, imageUrl: '/images/vietnamese_7.png', correctCountry: 'Vietnamese' },
-  { id: 38, imageUrl: '/images/vietnamese_8.jpeg', correctCountry: 'Vietnamese' },
-  { id: 39, imageUrl: '/images/vietnamese_9.jpeg', correctCountry: 'Vietnamese' },
-  { id: 40, imageUrl: '/images/vietnamese_10.jpeg', correctCountry: 'Vietnamese' },
+  // Vietnamese (15) - NEW
+  { id: 46, imageUrl: '/images/vietnamese_1.webp', correctCountry: 'Vietnamese' },
+  { id: 47, imageUrl: '/images/vietnamese_2.jpg', correctCountry: 'Vietnamese' },
+  { id: 48, imageUrl: '/images/vietnamese_3.png', correctCountry: 'Vietnamese' },
+  { id: 49, imageUrl: '/images/vietnamese_4.webp', correctCountry: 'Vietnamese' },
+  { id: 50, imageUrl: '/images/vietnamese_5.png', correctCountry: 'Vietnamese' },
+  { id: 51, imageUrl: '/images/vietnamese_6.jpg', correctCountry: 'Vietnamese' },
+  { id: 52, imageUrl: '/images/vietnamese_7.jpeg', correctCountry: 'Vietnamese' },
+  { id: 53, imageUrl: '/images/vietnamese_8.jpeg', correctCountry: 'Vietnamese' },
+  { id: 54, imageUrl: '/images/vietnamese_9.jpeg', correctCountry: 'Vietnamese' },
+  { id: 55, imageUrl: '/images/vietnamese_10.jpeg', correctCountry: 'Vietnamese' },
+  { id: 56, imageUrl: '/images/vietnamese_11.jpeg', correctCountry: 'Vietnamese' },
+  { id: 57, imageUrl: '/images/vietnamese_12.jpeg', correctCountry: 'Vietnamese' },
+  { id: 58, imageUrl: '/images/vietnamese_13.jpeg', correctCountry: 'Vietnamese' },
+  { id: 59, imageUrl: '/images/vietnamese_14.jpeg', correctCountry: 'Vietnamese' },
+  { id: 60, imageUrl: '/images/vietnamese_15.jpeg', correctCountry: 'Vietnamese' },
   
-  // Mongolian (10)
-  { id: 41, imageUrl: '/images/mongolian_1.jpeg', correctCountry: 'Mongolian' },
-  { id: 42, imageUrl: '/images/mongolian_2.jpeg', correctCountry: 'Mongolian' },
-  { id: 43, imageUrl: '/images/mongolian_3.jpeg', correctCountry: 'Mongolian' },
-  { id: 44, imageUrl: '/images/mongolian_4.jpeg', correctCountry: 'Mongolian' },
-  { id: 45, imageUrl: '/images/mongolian_5.jpeg', correctCountry: 'Mongolian' },
-  { id: 46, imageUrl: '/images/mongolian_6.jpeg', correctCountry: 'Mongolian' },
-  { id: 47, imageUrl: '/images/mongolian_7.jpeg', correctCountry: 'Mongolian' },
-  { id: 48, imageUrl: '/images/mongolian_8.jpeg', correctCountry: 'Mongolian' },
-  { id: 49, imageUrl: '/images/mongolian_9.jpeg', correctCountry: 'Mongolian' },
-  { id: 50, imageUrl: '/images/mongolian_10.webp', correctCountry: 'Mongolian' },
+  // Mongolian (15)
+  { id: 61, imageUrl: '/images/mongolian_1.jpeg', correctCountry: 'Mongolian' },
+  { id: 62, imageUrl: '/images/mongolian_2.jpeg', correctCountry: 'Mongolian' },
+  { id: 63, imageUrl: '/images/mongolian_3.jpeg', correctCountry: 'Mongolian' },
+  { id: 64, imageUrl: '/images/mongolian_4.jpeg', correctCountry: 'Mongolian' },
+  { id: 65, imageUrl: '/images/mongolian_5.jpeg', correctCountry: 'Mongolian' },
+  { id: 66, imageUrl: '/images/mongolian_6.jpeg', correctCountry: 'Mongolian' },
+  { id: 67, imageUrl: '/images/mongolian_7.jpeg', correctCountry: 'Mongolian' },
+  { id: 68, imageUrl: '/images/mongolian_8.jpeg', correctCountry: 'Mongolian' },
+  { id: 69, imageUrl: '/images/mongolian_9.jpeg', correctCountry: 'Mongolian' },
+  { id: 70, imageUrl: '/images/mongolian_10.webp', correctCountry: 'Mongolian' },
+  { id: 71, imageUrl: '/images/mongolian_11.jpeg', correctCountry: 'Mongolian' },
+  { id: 72, imageUrl: '/images/mongolian_12.jpg', correctCountry: 'Mongolian' },
+  { id: 73, imageUrl: '/images/mongolian_13.jpeg', correctCountry: 'Mongolian' },
+  { id: 74, imageUrl: '/images/mongolian_14.jpg', correctCountry: 'Mongolian' },
+  { id: 75, imageUrl: '/images/mongolian_15.jpg', correctCountry: 'Mongolian' },
 ];
 
 // Number of questions per quiz attempt
@@ -160,29 +185,24 @@ export default function FaceOriginQuiz() {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-    if (stage === 'quiz' && questions.length === 0) {
+    if (stage === 'instructions') {
       setQuestions(selectRandom(IMAGE_POOL, QUESTIONS_PER_QUIZ));
     }
-  }, [stage, questions.length]);
-
-  const handleDemographicsChange = (field, value) => {
-    setDemographics(prev => ({ ...prev, [field]: value }));
-  };
+  }, [stage]);
 
   const handleAnswer = (selectedCountry) => {
     const currentQuestion = questions[currentIndex];
+    const isCorrect = selectedCountry === currentQuestion.correctCountry;
     
-    const response = {
-      questionId: currentQuestion.id,
-      correctCountry: currentQuestion.correctCountry,
+    setResponses([...responses, {
+      imageId: currentQuestion.id,
       selectedCountry,
-      isCorrect: selectedCountry === currentQuestion.correctCountry,
-    };
-    
-    setResponses(prev => [...prev, response]);
-    
+      correctCountry: currentQuestion.correctCountry,
+      isCorrect
+    }]);
+
     if (currentIndex < questions.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex(currentIndex + 1);
     } else {
       setStage('results');
     }
@@ -190,23 +210,11 @@ export default function FaceOriginQuiz() {
 
   const calculateResults = () => {
     const correct = responses.filter(r => r.isCorrect).length;
-    const total = responses.length;
-    const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
-    
-    const byCountry = COUNTRIES.map(country => {
-      const countryResponses = responses.filter(r => r.correctCountry === country);
-      const countryCorrect = countryResponses.filter(r => r.isCorrect).length;
-      return {
-        country,
-        correct: countryCorrect,
-        total: countryResponses.length,
-        accuracy: countryResponses.length > 0 
-          ? ((countryCorrect / countryResponses.length) * 100).toFixed(1) 
-          : 0,
-      };
-    });
-    
-    return { correct, total, accuracy, byCountry };
+    return {
+      correct,
+      total: responses.length,
+      percentage: Math.round((correct / responses.length) * 100)
+    };
   };
 
   // ==========================================
@@ -216,21 +224,21 @@ export default function FaceOriginQuiz() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-4">
         <div className="max-w-2xl w-full text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            East Asian Identifier
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            East Asian Nationality Identification Study
           </h1>
-          <p className="text-lg text-gray-600 mb-8">
-            A research study on cross-cultural face perception
+          <p className="text-gray-600 mb-8">
+            A research study on cross-cultural facial perception
           </p>
           
-          {/* Flags row */}
-          <div className="flex justify-center items-center gap-4 md:gap-6 mb-10 flex-wrap">
+          {/* Flag display */}
+          <div className="flex justify-center gap-4 mb-8">
             {FLAGS.map((flag) => (
               <div key={flag.country} className="flex flex-col items-center">
                 <img 
                   src={flag.src} 
-                  alt={`Flag of ${flag.country}`}
-                  className="w-16 h-10 md:w-20 md:h-12 object-cover rounded shadow-md border border-gray-200"
+                  alt={`${flag.country} flag`}
+                  className="w-16 h-10 object-cover border border-gray-200 rounded shadow-sm"
                 />
                 <span className="text-xs text-gray-500 mt-1">{flag.country}</span>
               </div>
@@ -239,14 +247,10 @@ export default function FaceOriginQuiz() {
           
           <button
             onClick={() => setStage('demographics')}
-            className="bg-blue-600 text-white py-3 px-10 rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg shadow-md"
+            className="bg-blue-600 text-white py-3 px-8 rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
-            Start Quiz
+            Start Study
           </button>
-          
-          <p className="text-sm text-gray-400 mt-8">
-            This quiz takes approximately 2-3 minutes to complete.
-          </p>
         </div>
       </div>
     );
@@ -256,37 +260,40 @@ export default function FaceOriginQuiz() {
   // DEMOGRAPHICS SCREEN
   // ==========================================
   if (stage === 'demographics') {
-    const isComplete = demographics.gender && demographics.race && demographics.eastAsianExposure;
-    
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="max-w-xl w-full bg-white rounded-xl shadow-lg p-8">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Face Origin Study</h1>
-          <p className="text-gray-500 mb-6">Please answer the following questions to begin.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">About You</h2>
+          <p className="text-gray-500 mb-6">Please answer a few questions before we begin.</p>
           
-          <div className="space-y-5">
+          <div className="space-y-6">
+            {/* Gender */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                What is your gender?
+              </label>
               <select
                 value={demographics.gender}
-                onChange={(e) => handleDemographicsChange('gender', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => setDemographics({...demographics, gender: e.target.value})}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Select...</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="non-binary">Non-binary</option>
-                <option value="prefer-not-say">Prefer not to say</option>
-                <option value="other">Other</option>
+                <option value="prefer-not">Prefer not to say</option>
               </select>
             </div>
             
+            {/* Race/Ethnicity */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Race/Ethnicity</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                What is your race/ethnicity?
+              </label>
               <select
                 value={demographics.race}
-                onChange={(e) => handleDemographicsChange('race', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => setDemographics({...demographics, race: e.target.value})}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Select...</option>
                 <option value="white">White/Caucasian</option>
@@ -299,37 +306,34 @@ export default function FaceOriginQuiz() {
                 <option value="pacific-islander">Pacific Islander</option>
                 <option value="mixed">Mixed/Multiple</option>
                 <option value="other">Other</option>
-                <option value="prefer-not-say">Prefer not to say</option>
+                <option value="prefer-not">Prefer not to say</option>
               </select>
             </div>
             
+            {/* East Asian Exposure */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Level of exposure to East Asian people/culture
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                How much exposure do you have to East Asian people/culture?
               </label>
               <select
                 value={demographics.eastAsianExposure}
-                onChange={(e) => handleDemographicsChange('eastAsianExposure', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => setDemographics({...demographics, eastAsianExposure: e.target.value})}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Select...</option>
-                <option value="none">None or very little</option>
-                <option value="low">Low (occasional media exposure)</option>
-                <option value="moderate">Moderate (some friends/acquaintances, regular media)</option>
-                <option value="high">High (many friends/colleagues, lived in East Asia)</option>
-                <option value="very-high">Very High (partner/family members, extensive time in East Asia)</option>
+                <option value="none">None/Very little</option>
+                <option value="some">Some (occasional media, acquaintances)</option>
+                <option value="moderate">Moderate (friends, regular media consumption)</option>
+                <option value="high">High (close relationships, lived in East Asia)</option>
+                <option value="native">I am East Asian</option>
               </select>
             </div>
           </div>
           
           <button
             onClick={() => setStage('instructions')}
-            disabled={!isComplete}
-            className={`w-full mt-8 py-3 px-6 rounded-lg font-medium transition-colors ${
-              isComplete 
-                ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
+            disabled={!demographics.gender || !demographics.race || !demographics.eastAsianExposure}
+            className="w-full mt-8 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             Continue
           </button>
@@ -344,18 +348,19 @@ export default function FaceOriginQuiz() {
   if (stage === 'instructions') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="max-w-xl bg-white rounded-xl shadow-lg p-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Instructions</h1>
+        <div className="max-w-xl w-full bg-white rounded-xl shadow-lg p-8 text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Instructions</h2>
           
-          <div className="text-gray-600 space-y-4 mb-8 text-left">
-            <p>You will be shown <strong>{QUESTIONS_PER_QUIZ} photographs</strong> of individuals from East Asia.</p>
-            
-            <p>For each photograph, please select which nationality you believe the person is:</p>
-            
-            <ul className="list-disc list-inside pl-4">
-              {COUNTRIES.map(c => <li key={c}>{c}</li>)}
+          <div className="text-left text-gray-600 space-y-4 mb-8">
+            <p>You will be shown <strong>{QUESTIONS_PER_QUIZ} photographs</strong> of East Asian individuals.</p>
+            <p>For each photo, select which country you think the person is from:</p>
+            <ul className="list-disc list-inside ml-4 space-y-1">
+              <li>China</li>
+              <li>Japan</li>
+              <li>South Korea</li>
+              <li>Vietnam</li>
+              <li>Mongolia</li>
             </ul>
-            
             <p>Please respond based on your first impression. There is no time limit, but try to respond naturally without overthinking.</p>
           </div>
           

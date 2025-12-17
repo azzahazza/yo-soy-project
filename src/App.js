@@ -1,10 +1,29 @@
 import { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+
+// ============================================
+// FIREBASE CONFIGURATION
+// ============================================
+const firebaseConfig = {
+  apiKey: "AIzaSyAduJ-gK2fiQG_2VvbGMTajDuFfy0k8LWs",
+  authDomain: "asiandatabase-af20d.firebaseapp.com",
+  projectId: "asiandatabase-af20d",
+  storageBucket: "asiandatabase-af20d.firebasestorage.app",
+  messagingSenderId: "1080575432088",
+  appId: "1:1080575432088:web:81faad19ea33e7d45947ed",
+  measurementId: "G-8TZ7HH35BY"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // ============================================
 // CONFIGURATION - All images with verified nationalities
 // ============================================
 const IMAGE_POOL = [
-  // Japanese (15) - NEW
+  // Japanese (15)
   { id: 1, imageUrl: '/images/japanese_1.jpeg', correctCountry: 'Japanese' },
   { id: 2, imageUrl: '/images/japanese_2.jpeg', correctCountry: 'Japanese' },
   { id: 3, imageUrl: '/images/japanese_3.jpeg', correctCountry: 'Japanese' },
@@ -55,7 +74,7 @@ const IMAGE_POOL = [
   { id: 44, imageUrl: '/images/chinese_14.jpg', correctCountry: 'Chinese' },
   { id: 45, imageUrl: '/images/chinese_15.jpg', correctCountry: 'Chinese' },
   
-  // Vietnamese (15) - NEW
+  // Vietnamese (15)
   { id: 46, imageUrl: '/images/vietnamese_1.webp', correctCountry: 'Vietnamese' },
   { id: 47, imageUrl: '/images/vietnamese_2.jpg', correctCountry: 'Vietnamese' },
   { id: 48, imageUrl: '/images/vietnamese_3.png', correctCountry: 'Vietnamese' },
@@ -95,6 +114,29 @@ const QUESTIONS_PER_QUIZ = 10;
 
 const COUNTRIES = ['Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Mongolian'];
 
+// Race labels mapping
+const RACE_LABELS = {
+  'white': 'White/Caucasian',
+  'black': 'Black/African',
+  'hispanic': 'Hispanic/Latino',
+  'south-asian': 'South Asian',
+  'east-asian': 'East Asian',
+  'southeast-asian': 'Southeast Asian',
+  'middle-eastern': 'Middle Eastern',
+  'pacific-islander': 'Pacific Islander',
+  'mixed': 'Mixed/Multiple',
+  'other': 'Other',
+  'prefer-not': 'Prefer not to say'
+};
+
+// Gender labels mapping
+const GENDER_LABELS = {
+  'male': 'Male',
+  'female': 'Female',
+  'non-binary': 'Non-binary',
+  'prefer-not': 'Prefer not to say'
+};
+
 // ============================================
 // UTILITY FUNCTIONS
 // ============================================
@@ -108,7 +150,6 @@ const shuffleArray = (array) => {
   return shuffled;
 };
 
-// Reorder array to ensure no more than 3 consecutive items have the same nationality
 const preventFourInARow = (array) => {
   const result = [...array];
   const maxAttempts = 100;
@@ -117,7 +158,6 @@ const preventFourInARow = (array) => {
   while (attempts < maxAttempts) {
     let needsReorder = false;
     
-    // Check for 4+ in a row
     for (let i = 0; i <= result.length - 4; i++) {
       const country = result[i].correctCountry;
       if (
@@ -125,10 +165,7 @@ const preventFourInARow = (array) => {
         result[i + 2].correctCountry === country &&
         result[i + 3].correctCountry === country
       ) {
-        // Found 4 in a row - swap the 4th one with a random different position
         const swapFrom = i + 3;
-        
-        // Find a valid position to swap with (different nationality)
         const validPositions = [];
         for (let j = 0; j < result.length; j++) {
           if (j !== swapFrom && result[j].correctCountry !== country) {
@@ -152,7 +189,6 @@ const preventFourInARow = (array) => {
   return result;
 };
 
-// Select N random items from array, ensuring no more than 3 of the same nationality in a row
 const selectRandom = (array, count) => {
   const shuffled = shuffleArray(array);
   const selected = shuffled.slice(0, Math.min(count, array.length));
@@ -163,7 +199,6 @@ const selectRandom = (array, count) => {
 // MAIN COMPONENT
 // ============================================
 
-// Flag images for title page
 const FLAGS = [
   { country: 'China', src: '/images/chinaflag.png' },
   { country: 'Japan', src: '/images/Flag_of_Japan.svg' },
@@ -183,12 +218,123 @@ export default function FaceOriginQuiz() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [responses, setResponses] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(5);
+  const [leaderboard, setLeaderboard] = useState({ byRace: [], byGender: [] });
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [scoreSaved, setScoreSaved] = useState(false);
+
+  // Timer for quiz questions
+  useEffect(() => {
+    if (stage === 'quiz' && questions.length > 0) {
+      setTimeLeft(5);
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            handleTimeOut();
+            return 5;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [stage, currentIndex, questions.length]);
+
+  const handleTimeOut = () => {
+    const currentQuestion = questions[currentIndex];
+    setResponses(prev => [...prev, {
+      imageId: currentQuestion.id,
+      selectedCountry: 'No answer (time out)',
+      correctCountry: currentQuestion.correctCountry,
+      isCorrect: false
+    }]);
+
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      setStage('results');
+    }
+  };
 
   useEffect(() => {
     if (stage === 'instructions') {
       setQuestions(selectRandom(IMAGE_POOL, QUESTIONS_PER_QUIZ));
     }
   }, [stage]);
+
+  // Save score to Firebase when results are shown
+  useEffect(() => {
+    if (stage === 'results' && !scoreSaved && responses.length > 0) {
+      saveScore();
+      fetchLeaderboard();
+    }
+  }, [stage, scoreSaved, responses.length]);
+
+  const saveScore = async () => {
+    try {
+      const correct = responses.filter(r => r.isCorrect).length;
+      await addDoc(collection(db, 'scores'), {
+        score: correct,
+        total: responses.length,
+        gender: demographics.gender,
+        race: demographics.race,
+        eastAsianExposure: demographics.eastAsianExposure,
+        timestamp: new Date()
+      });
+      setScoreSaved(true);
+    } catch (error) {
+      console.error('Error saving score:', error);
+    }
+  };
+
+  const fetchLeaderboard = async () => {
+    try {
+      const scoresRef = collection(db, 'scores');
+      const snapshot = await getDocs(scoresRef);
+      const scores = snapshot.docs.map(doc => doc.data());
+
+      // Calculate averages by race
+      const raceGroups = {};
+      scores.forEach(s => {
+        if (!raceGroups[s.race]) {
+          raceGroups[s.race] = { total: 0, count: 0 };
+        }
+        raceGroups[s.race].total += s.score;
+        raceGroups[s.race].count += 1;
+      });
+
+      const byRace = Object.entries(raceGroups)
+        .map(([race, data]) => ({
+          label: RACE_LABELS[race] || race,
+          average: (data.total / data.count).toFixed(2),
+          count: data.count
+        }))
+        .sort((a, b) => b.average - a.average);
+
+      // Calculate averages by gender
+      const genderGroups = {};
+      scores.forEach(s => {
+        if (!genderGroups[s.gender]) {
+          genderGroups[s.gender] = { total: 0, count: 0 };
+        }
+        genderGroups[s.gender].total += s.score;
+        genderGroups[s.gender].count += 1;
+      });
+
+      const byGender = Object.entries(genderGroups)
+        .map(([gender, data]) => ({
+          label: GENDER_LABELS[gender] || gender,
+          average: (data.total / data.count).toFixed(2),
+          count: data.count
+        }))
+        .sort((a, b) => b.average - a.average);
+
+      setLeaderboard({ byRace, byGender });
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error);
+    }
+  };
 
   const handleAnswer = (selectedCountry) => {
     const currentQuestion = questions[currentIndex];
@@ -201,6 +347,8 @@ export default function FaceOriginQuiz() {
       isCorrect
     }]);
 
+    setTimeLeft(5);
+    
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
@@ -225,13 +373,12 @@ export default function FaceOriginQuiz() {
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-4">
         <div className="max-w-2xl w-full text-center">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            East Asian Nationality Identification Study
+            Identify The Asian
           </h1>
           <p className="text-gray-600 mb-8">
-            A research study on cross-cultural facial perception
+            Which people are the Asians best friends?
           </p>
           
-          {/* Flag display */}
           <div className="flex justify-center gap-4 mb-8">
             {FLAGS.map((flag) => (
               <div key={flag.country} className="flex flex-col items-center">
@@ -267,7 +414,6 @@ export default function FaceOriginQuiz() {
           <p className="text-gray-500 mb-6">Please answer a few questions before we begin.</p>
           
           <div className="space-y-6">
-            {/* Gender */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 What is your gender?
@@ -285,7 +431,6 @@ export default function FaceOriginQuiz() {
               </select>
             </div>
             
-            {/* Race/Ethnicity */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 What is your race/ethnicity?
@@ -310,7 +455,6 @@ export default function FaceOriginQuiz() {
               </select>
             </div>
             
-            {/* East Asian Exposure */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 How much exposure do you have to East Asian people/culture?
@@ -361,7 +505,7 @@ export default function FaceOriginQuiz() {
               <li>Vietnam</li>
               <li>Mongolia</li>
             </ul>
-            <p>Please respond based on your first impression. There is no time limit, but try to respond naturally without overthinking.</p>
+            <p><strong>You have 5 seconds per question!</strong> Please respond based on your first impression.</p>
           </div>
           
           <button
@@ -385,11 +529,12 @@ export default function FaceOriginQuiz() {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
         <div className="max-w-4xl w-full">
-          {/* Progress bar */}
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-500 mb-2">
               <span>Question {currentIndex + 1} of {questions.length}</span>
-              <span>{Math.round(progress)}% complete</span>
+              <span className={`font-bold ${timeLeft <= 2 ? 'text-red-500' : 'text-gray-500'}`}>
+                ⏱️ {timeLeft}s
+              </span>
             </div>
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <div 
@@ -397,12 +542,16 @@ export default function FaceOriginQuiz() {
                 style={{ width: `${progress}%` }}
               />
             </div>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden mt-1">
+              <div 
+                className={`h-full transition-all duration-1000 ${timeLeft <= 2 ? 'bg-red-500' : 'bg-green-500'}`}
+                style={{ width: `${(timeLeft / 5) * 100}%` }}
+              />
+            </div>
           </div>
           
-          {/* Image and answers side by side */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="flex flex-col md:flex-row md:min-h-96">
-              {/* Image on left */}
               <div className="md:w-1/2 bg-gray-100 flex items-center justify-center">
                 <img 
                   src={currentQuestion.imageUrl} 
@@ -411,7 +560,6 @@ export default function FaceOriginQuiz() {
                 />
               </div>
               
-              {/* Answers on right */}
               <div className="md:w-1/2 p-6 flex flex-col justify-center">
                 <p className="text-center text-gray-700 mb-4 font-medium">
                   What nationality is this person?
@@ -444,12 +592,11 @@ export default function FaceOriginQuiz() {
     const correct = results.correct;
     const wrong = results.total - results.correct;
     
-    // Custom messages based on score
     let message = "";
     if (correct <= 3) {
       message = "You probably do the voices";
     } else if (correct <= 7) {
-      const raceLabel = demographics.race === 'white' ? 'White/Caucasian' : demographics.race === 'black' ? 'Black/African' : demographics.race === 'hispanic' ? 'Hispanic/Latino' : demographics.race === 'south-asian' ? 'South Asian' : demographics.race === 'east-asian' ? 'East Asian' : demographics.race === 'southeast-asian' ? 'Southeast Asian' : demographics.race === 'middle-eastern' ? 'Middle Eastern' : demographics.race === 'pacific-islander' ? 'Pacific Islander' : demographics.race === 'mixed' ? 'Mixed/Multiple' : demographics.race === 'other' ? 'Other' : 'Prefer not to say';
+      const raceLabel = RACE_LABELS[demographics.race] || demographics.race;
       message = `You have made your fellow ${raceLabel} people very proud!`;
     } else {
       message = "我们需要你们战斗，我们将把台北从帝国主义猪猡手中解放出来!";
@@ -460,6 +607,8 @@ export default function FaceOriginQuiz() {
       setCurrentIndex(0);
       setResponses([]);
       setShowDetails(false);
+      setScoreSaved(false);
+      setShowLeaderboard(false);
       setStage('instructions');
     };
     
@@ -469,7 +618,6 @@ export default function FaceOriginQuiz() {
           <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">Your Results</h1>
           <p className="text-gray-500 text-center mb-8">Thanks for participating!</p>
           
-          {/* Score Summary */}
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="text-center p-4 bg-white rounded-lg border-2 border-green-200">
@@ -482,12 +630,10 @@ export default function FaceOriginQuiz() {
               </div>
             </div>
             
-            {/* Custom message */}
             <div className="text-center p-4 bg-blue-50 rounded-lg">
               <p className="text-lg font-medium text-gray-700">{message}</p>
             </div>
             
-            {/* Low score image */}
             {correct <= 3 && (
               <div className="mt-4 flex justify-center">
                 <img 
@@ -499,7 +645,6 @@ export default function FaceOriginQuiz() {
               </div>
             )}
             
-            {/* Mid score image */}
             {correct >= 4 && correct <= 7 && (
               <div className="mt-4 flex justify-center">
                 <img 
@@ -511,7 +656,6 @@ export default function FaceOriginQuiz() {
               </div>
             )}
             
-            {/* High score image */}
             {correct >= 8 && (
               <div className="mt-4 flex justify-center">
                 <img 
@@ -524,7 +668,6 @@ export default function FaceOriginQuiz() {
             )}
           </div>
           
-          {/* Show Details Button */}
           {!showDetails && (
             <button
               onClick={() => setShowDetails(true)}
@@ -534,7 +677,6 @@ export default function FaceOriginQuiz() {
             </button>
           )}
           
-          {/* Detailed Results */}
           {showDetails && (
             <div className="mb-6 space-y-3 max-h-64 overflow-y-auto">
               {responses.map((response, index) => (
@@ -558,6 +700,69 @@ export default function FaceOriginQuiz() {
                   <span className="text-xl">{response.isCorrect ? '✓' : '✗'}</span>
                 </div>
               ))}
+            </div>
+          )}
+
+          {!showLeaderboard && (
+            <button
+              onClick={() => setShowLeaderboard(true)}
+              className="w-full mb-4 py-3 px-6 rounded-lg font-medium border-2 border-purple-300 text-purple-600 hover:bg-purple-50 transition-colors"
+            >
+              🏆 View Leaderboard
+            </button>
+          )}
+
+          {showLeaderboard && (
+            <div className="mb-6 space-y-4">
+              <div className="bg-purple-50 rounded-lg p-4">
+                <h3 className="font-bold text-purple-800 mb-3">🌍 Average Score by Ethnicity</h3>
+                {leaderboard.byRace.length > 0 ? (
+                  <div className="space-y-2">
+                    {leaderboard.byRace.map((entry, index) => (
+                      <div key={entry.label} className="flex justify-between items-center bg-white p-2 rounded">
+                        <span className="flex items-center gap-2">
+                          {index === 0 && '🥇'}
+                          {index === 1 && '🥈'}
+                          {index === 2 && '🥉'}
+                          {index > 2 && <span className="w-5 text-center text-gray-400">{index + 1}</span>}
+                          <span className="text-sm">{entry.label}</span>
+                        </span>
+                        <span className="text-sm">
+                          <span className="font-bold text-purple-600">{entry.average}</span>
+                          <span className="text-gray-400 ml-1">({entry.count})</span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500">Loading...</p>
+                )}
+              </div>
+
+              <div className="bg-blue-50 rounded-lg p-4">
+                <h3 className="font-bold text-blue-800 mb-3">👤 Average Score by Gender</h3>
+                {leaderboard.byGender.length > 0 ? (
+                  <div className="space-y-2">
+                    {leaderboard.byGender.map((entry, index) => (
+                      <div key={entry.label} className="flex justify-between items-center bg-white p-2 rounded">
+                        <span className="flex items-center gap-2">
+                          {index === 0 && '🥇'}
+                          {index === 1 && '🥈'}
+                          {index === 2 && '🥉'}
+                          {index > 2 && <span className="w-5 text-center text-gray-400">{index + 1}</span>}
+                          <span className="text-sm">{entry.label}</span>
+                        </span>
+                        <span className="text-sm">
+                          <span className="font-bold text-blue-600">{entry.average}</span>
+                          <span className="text-gray-400 ml-1">({entry.count})</span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500">Loading...</p>
+                )}
+              </div>
             </div>
           )}
           

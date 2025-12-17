@@ -396,13 +396,13 @@ export default function FaceOriginQuiz() {
           
           {/* Image and answers side by side */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row md:min-h-96">
               {/* Image on left */}
-              <div className="md:w-1/2 bg-gray-100 flex items-center justify-center" style={{ height: '320px' }}>
+              <div className="md:w-1/2 bg-gray-100 flex items-center justify-center">
                 <img 
                   src={currentQuestion.imageUrl} 
                   alt="Person to identify"
-                  style={{ height: '100%', width: 'auto', objectFit: 'contain' }}
+                  style={{ height: '100%', width: 'auto', maxHeight: '384px', objectFit: 'contain' }}
                 />
               </div>
               

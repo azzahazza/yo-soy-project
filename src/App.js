@@ -379,7 +379,7 @@ export default function FaceOriginQuiz() {
     
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-        <div className="max-w-lg w-full">
+        <div className="max-w-4xl w-full">
           {/* Progress bar */}
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-500 mb-2">
@@ -394,31 +394,35 @@ export default function FaceOriginQuiz() {
             </div>
           </div>
           
-          {/* Image card */}
+          {/* Image and answers side by side */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="aspect-square bg-gray-100 flex items-center justify-center">
-              <img 
-                src={currentQuestion.imageUrl} 
-                alt="Person to identify"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            
-            <div className="p-6">
-              <p className="text-center text-gray-700 mb-4 font-medium">
-                What nationality is this person?
-              </p>
+            <div className="flex flex-col md:flex-row">
+              {/* Image on left */}
+              <div className="md:w-1/2 bg-gray-100 flex items-center justify-center">
+                <img 
+                  src={currentQuestion.imageUrl} 
+                  alt="Person to identify"
+                  className="w-full h-64 md:h-80 object-cover"
+                />
+              </div>
               
-              <div className="grid grid-cols-1 gap-3">
-                {COUNTRIES.map(country => (
-                  <button
-                    key={country}
-                    onClick={() => handleAnswer(country)}
-                    className="w-full py-3 px-4 border-2 border-gray-200 rounded-lg font-medium text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors"
-                  >
-                    {country}
-                  </button>
-                ))}
+              {/* Answers on right */}
+              <div className="md:w-1/2 p-6 flex flex-col justify-center">
+                <p className="text-center text-gray-700 mb-4 font-medium">
+                  What nationality is this person?
+                </p>
+                
+                <div className="grid grid-cols-1 gap-3">
+                  {COUNTRIES.map(country => (
+                    <button
+                      key={country}
+                      onClick={() => handleAnswer(country)}
+                      className="w-full py-3 px-4 border-2 border-gray-200 rounded-lg font-medium text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                    >
+                      {country}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -438,7 +442,7 @@ export default function FaceOriginQuiz() {
     // Custom messages based on score
     let message = "";
     if (correct <= 3) {
-      message = "You probably do the voices";
+      message = "You probably do the voices in private";
     } else if (correct <= 7) {
       message = `You aight ${demographics.race === 'white' ? 'White/Caucasian' : demographics.race === 'black' ? 'Black/African' : demographics.race === 'hispanic' ? 'Hispanic/Latino' : demographics.race === 'south-asian' ? 'South Asian' : demographics.race === 'east-asian' ? 'East Asian' : demographics.race === 'southeast-asian' ? 'Southeast Asian' : demographics.race === 'middle-eastern' ? 'Middle Eastern' : demographics.race === 'pacific-islander' ? 'Pacific Islander' : demographics.race === 'mixed' ? 'Mixed/Multiple' : demographics.race === 'other' ? 'Other' : 'Prefer not to say'} boy`;
     } else {

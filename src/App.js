@@ -527,9 +527,9 @@ export default function FaceOriginQuiz() {
     const progress = ((currentIndex) / questions.length) * 100;
     
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-2 md:p-4">
         <div className="max-w-4xl w-full">
-          <div className="mb-6">
+          <div className="mb-3 md:mb-6">
             <div className="flex justify-between text-sm text-gray-500 mb-2">
               <span>Question {currentIndex + 1} of {questions.length}</span>
               <span className={`font-bold ${timeLeft <= 2 ? 'text-red-500' : 'text-gray-500'}`}>
@@ -551,26 +551,26 @@ export default function FaceOriginQuiz() {
           </div>
           
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="flex flex-col md:flex-row md:min-h-96">
-              <div className="md:w-1/2 bg-gray-100 flex items-center justify-center">
+            <div className="flex flex-col md:flex-row">
+              <div className="md:w-1/2 bg-gray-100 flex items-center justify-center p-2">
                 <img 
                   src={currentQuestion.imageUrl} 
                   alt="Person to identify"
-                  style={{ height: '100%', width: 'auto', maxHeight: '384px', objectFit: 'contain' }}
+                  className="max-h-40 md:max-h-96 w-auto object-contain"
                 />
               </div>
               
-              <div className="md:w-1/2 p-6 flex flex-col justify-center">
-                <p className="text-center text-gray-700 mb-4 font-medium">
+              <div className="md:w-1/2 p-3 md:p-6 flex flex-col justify-center">
+                <p className="text-center text-gray-700 mb-2 md:mb-4 font-medium text-sm md:text-base">
                   What nationality is this person?
                 </p>
                 
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-2 md:gap-3">
                   {COUNTRIES.map(country => (
                     <button
                       key={country}
                       onClick={() => handleAnswer(country)}
-                      className="w-full py-3 px-4 border-2 border-gray-200 rounded-lg font-medium text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                      className="w-full py-2 md:py-3 px-3 md:px-4 border-2 border-gray-200 rounded-lg font-medium text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition-colors text-sm md:text-base"
                     >
                       {country}
                     </button>

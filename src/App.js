@@ -222,38 +222,6 @@ export default function FaceOriginQuiz() {
   const [leaderboard, setLeaderboard] = useState({ byRace: [], byGender: [] });
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [scoreSaved, setScoreSaved] = useState(false);
-  const [fakeDataStatus, setFakeDataStatus] = useState('');
-
-  // Function to generate fake data
-  const generateFakeData = async () => {
-    setFakeDataStatus('Adding fake data...');
-    const genders = ['male', 'female', 'male', 'female', 'male', 'female', 'non-binary'];
-    const races = ['white', 'black', 'hispanic', 'south-asian', 'east-asian', 'southeast-asian', 'middle-eastern', 'mixed'];
-    const exposures = ['none', 'some', 'moderate', 'high', 'native'];
-    
-    try {
-      for (let i = 0; i < 25; i++) {
-        const race = races[Math.floor(Math.random() * races.length)];
-        // East Asians and Southeast Asians score slightly higher on average
-        let baseScore = Math.floor(Math.random() * 7) + 2; // 2-8 base
-        if (race === 'east-asian' || race === 'southeast-asian') {
-          baseScore = Math.min(10, baseScore + Math.floor(Math.random() * 2) + 1);
-        }
-        
-        await addDoc(collection(db, 'scores'), {
-          score: baseScore,
-          total: 10,
-          gender: genders[Math.floor(Math.random() * genders.length)],
-          race: race,
-          eastAsianExposure: exposures[Math.floor(Math.random() * exposures.length)],
-          timestamp: new Date()
-        });
-      }
-      setFakeDataStatus('Done! Added 25 fake entries.');
-    } catch (error) {
-      setFakeDataStatus('Error: ' + error.message);
-    }
-  };
 
   // Timer for quiz questions
   useEffect(() => {
@@ -430,17 +398,6 @@ export default function FaceOriginQuiz() {
           >
             Start Study
           </button>
-          
-          {/* TEMPORARY - Remove before sharing */}
-          <div className="mt-8 pt-8 border-t border-gray-200">
-            <button
-              onClick={generateFakeData}
-              className="bg-gray-400 text-white py-2 px-4 rounded text-sm hover:bg-gray-500"
-            >
-              🔧 Add 25 Fake Entries
-            </button>
-            {fakeDataStatus && <p className="text-sm text-gray-500 mt-2">{fakeDataStatus}</p>}
-          </div>
         </div>
       </div>
     );

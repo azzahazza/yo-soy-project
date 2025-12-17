@@ -53,16 +53,16 @@ const IMAGE_POOL = [
   { id: 40, imageUrl: '/images/vietnamese_10.jpeg', correctCountry: 'Vietnamese' },
   
   // Mongolian (10)
-  { id: 41, imageUrl: '/images/mongolian_1.png', correctCountry: 'Mongolian' },
-  { id: 42, imageUrl: '/images/mongolian_2.webp', correctCountry: 'Mongolian' },
-  { id: 43, imageUrl: '/images/mongolian_3.webp', correctCountry: 'Mongolian' },
-  { id: 44, imageUrl: '/images/mongolian_4.jpg', correctCountry: 'Mongolian' },
-  { id: 45, imageUrl: '/images/mongolian_5.webp', correctCountry: 'Mongolian' },
-  { id: 46, imageUrl: '/images/mongolian_6.webp', correctCountry: 'Mongolian' },
-  { id: 47, imageUrl: '/images/mongolian_7.webp', correctCountry: 'Mongolian' },
-  { id: 48, imageUrl: '/images/mongolian_8.webp', correctCountry: 'Mongolian' },
-  { id: 49, imageUrl: '/images/mongolian_9.webp', correctCountry: 'Mongolian' },
-  { id: 50, imageUrl: '/images/mongolian_10.jpeg', correctCountry: 'Mongolian' },
+  { id: 41, imageUrl: '/images/mongolian_1.jpeg', correctCountry: 'Mongolian' },
+  { id: 42, imageUrl: '/images/mongolian_2.jpeg', correctCountry: 'Mongolian' },
+  { id: 43, imageUrl: '/images/mongolian_3.jpeg', correctCountry: 'Mongolian' },
+  { id: 44, imageUrl: '/images/mongolian_4.jpeg', correctCountry: 'Mongolian' },
+  { id: 45, imageUrl: '/images/mongolian_5.jpeg', correctCountry: 'Mongolian' },
+  { id: 46, imageUrl: '/images/mongolian_6.jpeg', correctCountry: 'Mongolian' },
+  { id: 47, imageUrl: '/images/mongolian_7.jpeg', correctCountry: 'Mongolian' },
+  { id: 48, imageUrl: '/images/mongolian_8.jpeg', correctCountry: 'Mongolian' },
+  { id: 49, imageUrl: '/images/mongolian_9.jpeg', correctCountry: 'Mongolian' },
+  { id: 50, imageUrl: '/images/mongolian_10.webp', correctCountry: 'Mongolian' },
 ];
 
 // Number of questions per quiz attempt

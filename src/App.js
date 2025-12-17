@@ -447,9 +447,10 @@ export default function FaceOriginQuiz() {
     // Custom messages based on score
     let message = "";
     if (correct <= 3) {
-      message = "You probably do the voices in private";
+      message = "You probably do the voices";
     } else if (correct <= 7) {
-      message = `You aight ${demographics.race === 'white' ? 'White/Caucasian' : demographics.race === 'black' ? 'Black/African' : demographics.race === 'hispanic' ? 'Hispanic/Latino' : demographics.race === 'south-asian' ? 'South Asian' : demographics.race === 'east-asian' ? 'East Asian' : demographics.race === 'southeast-asian' ? 'Southeast Asian' : demographics.race === 'middle-eastern' ? 'Middle Eastern' : demographics.race === 'pacific-islander' ? 'Pacific Islander' : demographics.race === 'mixed' ? 'Mixed/Multiple' : demographics.race === 'other' ? 'Other' : 'Prefer not to say'} boy`;
+      const raceLabel = demographics.race === 'white' ? 'White/Caucasian' : demographics.race === 'black' ? 'Black/African' : demographics.race === 'hispanic' ? 'Hispanic/Latino' : demographics.race === 'south-asian' ? 'South Asian' : demographics.race === 'east-asian' ? 'East Asian' : demographics.race === 'southeast-asian' ? 'Southeast Asian' : demographics.race === 'middle-eastern' ? 'Middle Eastern' : demographics.race === 'pacific-islander' ? 'Pacific Islander' : demographics.race === 'mixed' ? 'Mixed/Multiple' : demographics.race === 'other' ? 'Other' : 'Prefer not to say';
+      message = `You have made your fellow ${raceLabel} people very proud!`;
     } else {
       message = "我们需要你们战斗，我们将把台北从帝国主义猪猡手中解放出来!";
     }
@@ -485,6 +486,42 @@ export default function FaceOriginQuiz() {
             <div className="text-center p-4 bg-blue-50 rounded-lg">
               <p className="text-lg font-medium text-gray-700">{message}</p>
             </div>
+            
+            {/* Low score image */}
+            {correct <= 3 && (
+              <div className="mt-4 flex justify-center">
+                <img 
+                  src="/images/low_score.png" 
+                  alt="Low score result"
+                  className="max-w-full h-auto rounded-lg"
+                  style={{ maxHeight: '200px' }}
+                />
+              </div>
+            )}
+            
+            {/* Mid score image */}
+            {correct >= 4 && correct <= 7 && (
+              <div className="mt-4 flex justify-center">
+                <img 
+                  src="/images/mid_score.jpg" 
+                  alt="Mid score result"
+                  className="max-w-full h-auto rounded-lg"
+                  style={{ maxHeight: '200px' }}
+                />
+              </div>
+            )}
+            
+            {/* High score image */}
+            {correct >= 8 && (
+              <div className="mt-4 flex justify-center">
+                <img 
+                  src="/images/high_score.png" 
+                  alt="High score result"
+                  className="max-w-full h-auto rounded-lg"
+                  style={{ maxHeight: '200px' }}
+                />
+              </div>
+            )}
           </div>
           
           {/* Show Details Button */}

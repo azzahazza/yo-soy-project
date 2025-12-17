@@ -157,6 +157,7 @@ export default function FaceOriginQuiz() {
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [responses, setResponses] = useState([]);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     if (stage === 'quiz' && questions.length === 0) {
@@ -437,9 +438,9 @@ export default function FaceOriginQuiz() {
     // Custom messages based on score
     let message = "";
     if (correct <= 3) {
-      message = "I bet you do the voice";
+      message = "You probably do the voices in private";
     } else if (correct <= 7) {
-      message = message = `You aight ${demographics.race === 'white' ? 'White/Caucasian' : demographics.race === 'black' ? 'Black/African' : demographics.race === 'hispanic' ? 'Hispanic/Latino' : demographics.race === 'south-asian' ? 'South Asian' : demographics.race === 'east-asian' ? 'East Asian' : demographics.race === 'southeast-asian' ? 'Southeast Asian' : demographics.race === 'middle-eastern' ? 'Middle Eastern' : demographics.race === 'pacific-islander' ? 'Pacific Islander' : demographics.race === 'mixed' ? 'Mixed/Multiple' : demographics.race === 'other' ? 'Other' : 'Prefer not to say'} boy`;
+      message = `You aight ${demographics.race === 'white' ? 'White/Caucasian' : demographics.race === 'black' ? 'Black/African' : demographics.race === 'hispanic' ? 'Hispanic/Latino' : demographics.race === 'south-asian' ? 'South Asian' : demographics.race === 'east-asian' ? 'East Asian' : demographics.race === 'southeast-asian' ? 'Southeast Asian' : demographics.race === 'middle-eastern' ? 'Middle Eastern' : demographics.race === 'pacific-islander' ? 'Pacific Islander' : demographics.race === 'mixed' ? 'Mixed/Multiple' : demographics.race === 'other' ? 'Other' : 'Prefer not to say'} boy`;
     } else {
       message = "我们需要你们战斗，我们将把台北从帝国主义猪猡手中解放出来!";
     }
@@ -448,6 +449,7 @@ export default function FaceOriginQuiz() {
       setQuestions([]);
       setCurrentIndex(0);
       setResponses([]);
+      setShowDetails(false);
       setStage('instructions');
     };
     
@@ -475,6 +477,43 @@ export default function FaceOriginQuiz() {
               <p className="text-lg font-medium text-gray-700">{message}</p>
             </div>
           </div>
+          
+          {/* Show Details Button */}
+          {!showDetails && (
+            <button
+              onClick={() => setShowDetails(true)}
+              className="w-full mb-4 py-3 px-6 rounded-lg font-medium border-2 border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              Show What I Got Right/Wrong
+            </button>
+          )}
+          
+          {/* Detailed Results */}
+          {showDetails && (
+            <div className="mb-6 space-y-3 max-h-64 overflow-y-auto">
+              {responses.map((response, index) => (
+                <div 
+                  key={index} 
+                  className={`flex items-center gap-3 p-3 rounded-lg ${response.isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}
+                >
+                  <img 
+                    src={questions[index].imageUrl} 
+                    alt={`Question ${index + 1}`}
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                  <div className="flex-1">
+                    <p className="text-sm">
+                      <span className="font-medium">You said:</span> {response.selectedCountry}
+                    </p>
+                    <p className="text-sm">
+                      <span className="font-medium">Actual:</span> {response.correctCountry}
+                    </p>
+                  </div>
+                  <span className="text-xl">{response.isCorrect ? '✓' : '✗'}</span>
+                </div>
+              ))}
+            </div>
+          )}
           
           <button
             onClick={handleTryAgain}
